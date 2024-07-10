@@ -69,8 +69,13 @@ namespace Microsoft.Maui.Platform
 		static readonly string[] TextColorResourceKeys =
 		{
 			"CalendarDatePickerTextForeground",
+			"CalendarDatePickerTextForegroundPointerOver",
+			"CalendarDatePickerTextForegroundPressed",
 			"CalendarDatePickerTextForegroundDisabled",
-			"CalendarDatePickerTextForegroundSelected"
+			"CalendarDatePickerTextForegroundSelected",
+			"CalendarDatePickerCalendarGlyphForeground",
+			"CalendarDatePickerCalendarGlyphForegroundPointerOver",
+			"CalendarDatePickerCalendarGlyphForegroundPressed"
 		};
 
 		// TODO NET8 add to public API
