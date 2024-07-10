@@ -99,6 +99,7 @@ namespace Microsoft.Maui.Platform
 
 		static readonly string[] BackgroundColorResourceKeys =
 		{
+			// Fixed the issue-22987
 			"CalendarDatePickerBackground",
 			"CalendarDatePickerBackgroundPointerOver",
 			"CalendarDatePickerBackgroundPressed",
