@@ -70,7 +70,7 @@ namespace Microsoft.Maui.Platform
 		{
 			"CalendarDatePickerTextForeground",
 			"CalendarDatePickerTextForegroundDisabled",
-			"CalendarDatePickerTextForegroundSelected",
+			"CalendarDatePickerTextForegroundSelected"
 		};
 
 		// TODO NET8 add to public API
