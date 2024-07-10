@@ -68,9 +68,15 @@ namespace Microsoft.Maui.Platform
 		// https://docs.microsoft.com/en-us/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.controls.calendardatepicker?view=windows-app-sdk-1.1
 		static readonly string[] TextColorResourceKeys =
 		{
+			// Fixed the issue 22987
 			"CalendarDatePickerTextForeground",
+			"CalendarDatePickerTextForegroundPointerOver",
+			"CalendarDatePickerTextForegroundPressed",
 			"CalendarDatePickerTextForegroundDisabled",
-			"CalendarDatePickerTextForegroundSelected"
+			"CalendarDatePickerTextForegroundSelected",
+			"CalendarDatePickerCalendarGlyphForeground",
+			"CalendarDatePickerCalendarGlyphForegroundPointerOver",
+			"CalendarDatePickerCalendarGlyphForegroundPressed"
 		};
 
 		// TODO NET8 add to public API
