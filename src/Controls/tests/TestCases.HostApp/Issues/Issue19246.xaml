@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Maui.Controls.Sample.Issues.Issue19246"
+             Title="Issue19246">
+     <ContentPage.Resources>
+    <Color x:Key="Gray100">#E1E1E1</Color>
+       <Color x:Key="Gray400">#919191</Color>
+          <Color x:Key="Gray950">#141414</Color>
+              <Color x:Key="Gray200">#C8C8C8</Color>
+        <Style TargetType="Button">
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
+                            <Setter Property="Background" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray100}}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Background" Value="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray400}}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    </ContentPage.Resources>
+     <ScrollView>
+        <VerticalStackLayout Padding="16,0" Spacing="10">
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test1" />
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test2" />
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test3" />
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test4" />
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test5" />
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test6" />
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test7" />
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test8" />
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test9" />
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test10" />
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test11" />
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test12" />
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test13" />
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test14" />
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test15" />
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test16" />
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test17" />
+                    <Button Background="Blue" AutomationId="Button18" HeightRequest="70" Text="Button Test18" />
+                    <Button Background="Blue" AutomationId="Button19" HeightRequest="70" Text="Button Test19" />
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test20" />
+                    <Button Background="Blue" HeightRequest="70" Text="Button Test21" />
+                </VerticalStackLayout>
+            </ScrollView>
+</ContentPage>
