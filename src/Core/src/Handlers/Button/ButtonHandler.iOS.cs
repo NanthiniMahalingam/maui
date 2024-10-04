@@ -205,11 +205,6 @@ namespace Microsoft.Maui.Handlers
                 HandleButtonInteraction();
             }
 
-			void OnButtonTouchUpInside(object? sender, EventArgs e)
-			{
-				HandleButtonInteraction();
-			}
-
 			void OnButtonTouchUpOutside(object? sender, EventArgs e)
 			{
 				VirtualView?.Released();
