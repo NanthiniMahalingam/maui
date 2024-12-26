@@ -934,10 +934,10 @@ namespace Microsoft.Maui.Controls
 			var result = ShellNavigationManager.GetNavigationState(shellItem, shellSection, shellContent, stack, modalStack);
 
 			if (result?.Location != oldState?.Location && (!(source is ShellNavigationSource.ShellSectionChanged) || stack.Count == 1))
-            {
-                SetValueFromRenderer(CurrentStatePropertyKey, result);
-                _navigationManager.HandleNavigated(new ShellNavigatedEventArgs(oldState, CurrentState, source));
-            }
+			{
+				SetValueFromRenderer(CurrentStatePropertyKey, result);
+				_navigationManager.HandleNavigated(new ShellNavigatedEventArgs(oldState, CurrentState, source));
+			}
 		}
 
 		ReadOnlyCollection<ShellItem> IShellController.GetItems() => ((ShellItemCollection)Items).VisibleItemsReadOnly;
