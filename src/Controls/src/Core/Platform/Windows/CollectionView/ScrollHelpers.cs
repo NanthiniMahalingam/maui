@@ -229,10 +229,11 @@ namespace Microsoft.Maui.Controls.Platform
 
 			var tcs = new TaskCompletionSource<object>();
 			Func<Task> adjust = null;
+			bool adjustmentMade = false;
 
 			async void ViewChanged(object s, ScrollViewerViewChangedEventArgs e)
 			{
-				if (e.IsIntermediate)
+				if (e.IsIntermediate || adjustmentMade)
 				{
 					return;
 				}
@@ -262,13 +263,29 @@ namespace Microsoft.Maui.Controls.Platform
 						list.ScrollIntoView(targetItem, ScrollIntoViewAlignment.Leading);
 						break;
 					case ScrollToPosition.Center:
-						list.ScrollIntoView(targetItem, ScrollIntoViewAlignment.Leading);
-						adjust = () => AdjustToCenterAsync(list, scrollViewer, targetItem);
-						break;
 					case ScrollToPosition.End:
 						list.ScrollIntoView(targetItem, ScrollIntoViewAlignment.Leading);
-						adjust = () => AdjustToEndAsync(list, scrollViewer, targetItem);
+
+						adjust = async () =>
+						{
+							await Task.Delay(1);
+							// Update ScrollView dimensions on the main thread
+							await MainThread.InvokeOnMainThreadAsync(async () =>
+							{
+								if (scrollToPosition == ScrollToPosition.Center)
+									await AdjustToCenterAsync(list, scrollViewer, targetItem);
+								else if (scrollToPosition == ScrollToPosition.End)
+									await AdjustToEndAsync(list, scrollViewer, targetItem);
+							});
+						};
 						break;
+				}
+
+				// Start the adjust operation asynchronously
+				if (adjust != null)
+				{
+					_ = adjust();
+					adjustmentMade = true; // Set the flag to indicate that adjustment has been made
 				}
 
 				await tcs.Task;
