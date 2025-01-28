@@ -39,6 +39,8 @@ namespace Microsoft.Maui.Platform
 			if (scrollViewer is not null)
 			{
 				scrollViewer.VerticalAlignment = verticalAlignment;
+				scrollViewer.Height = scrollViewer.ActualHeight;
+				scrollViewer.Width = scrollViewer.ActualWidth;
 			}
 
 			var placeholder = element?.GetDescendantByName<TextBlock>(PlaceholderTextContentPresenterName);
