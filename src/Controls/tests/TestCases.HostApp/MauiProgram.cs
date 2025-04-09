@@ -75,6 +75,19 @@ namespace Maui.Controls.Sample
 
 		public App()
 		{
+			ApplyGlobalResourceStyleToLabel_Issue19190();
+		}
+
+		void ApplyGlobalResourceStyleToLabel_Issue19190()
+		{
+			Resources.Add(new Style(typeof(Issue19190Label))
+			{
+				Setters =
+				{
+					new Setter { Property = Label.TextColorProperty, Value = Colors.Black },
+					new Setter { Property = Label.FontSizeProperty, Value = 16 }
+				}
+			});
 		}
 
 		public static bool PreloadTestCasesIssuesList { get; set; } = true;
