@@ -18,6 +18,8 @@ using WASDKDataTemplate = Microsoft.UI.Xaml.DataTemplate;
 using WASDKScrollBarVisibility = Microsoft.UI.Xaml.Controls.ScrollBarVisibility;
 using WRect = Windows.Foundation.Rect;
 using WVisibility = Microsoft.UI.Xaml.Visibility;
+using WSize = Windows.Foundation.Size;
+using Microsoft.UI.Xaml.Media;
 
 namespace Microsoft.Maui.Controls.Handlers.Items
 {
@@ -217,6 +219,18 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 
 				if (_emptyView != null && ListViewBase is IEmptyView emptyView)
 				{
+					if (ListViewBase.Header is not null)
+					{
+						var header = ListViewBase.Header as View;
+						if (header != null)
+						{
+							var headerHandler = header.ToHandler(Element.GetCurrentlyPresentedMauiContext());
+							headerHandler.PlatformView.Measure(new WSize(double.PositiveInfinity, double.PositiveInfinity));
+							var transform = new TranslateTransform() { X = 0, Y = headerHandler.PlatformView.DesiredSize.Height };
+							_emptyView.RenderTransform = transform;
+						}
+					}
+
 					emptyView.EmptyViewVisibility = WVisibility.Visible;
 
 					if (PlatformView.ActualWidth >= 0 && PlatformView.ActualHeight >= 0)
