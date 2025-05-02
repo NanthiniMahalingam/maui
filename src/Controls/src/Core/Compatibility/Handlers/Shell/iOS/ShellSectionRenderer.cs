@@ -784,6 +784,11 @@ namespace Microsoft.Maui.Controls.Platform.Compatibility
 					coordinator.NotifyWhenInteractionChanges(OnInteractionChanged);
 				}
 
+				if (navBarVisible && _self._context?.Shell is IShellController shell)
+				{
+					shell.AppearanceChanged(element, false);
+				}
+
 				// Because the back button title needs to be set on the previous VC
 				// We want to set the BackButtonItem as early as possible so there is no flickering
 				var currentPage = _self._context?.Shell?.GetCurrentShellPage();
