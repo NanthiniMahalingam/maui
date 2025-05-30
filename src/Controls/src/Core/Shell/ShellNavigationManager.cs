@@ -255,6 +255,11 @@ namespace Microsoft.Maui.Controls
 			else
 			{
 				_accumulatedEvent = null;
+				if (_shell.CurrentPage.HasNavigatedTo)
+				{
+					return;
+				}
+
 				BaseShellItem baseShellItem = _shell.CurrentItem?.CurrentItem?.CurrentItem;
 
 				if (baseShellItem != null)
