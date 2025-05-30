@@ -699,8 +699,11 @@ namespace Microsoft.Maui.Controls
 				},
 				() =>
 				{
-					// TODO this is the wrong navigation type
-					SendNavigated(null, NavigationType.Initialize);
+					if (!CurrentPage.HasNavigatedTo)
+					{
+						// TODO this is the wrong navigation type
+						SendNavigated(null, NavigationType.Initialize);
+					}
 				})
 				.FireAndForget(Handler);
 			}
