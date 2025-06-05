@@ -234,7 +234,7 @@ namespace Microsoft.Maui.Controls.Platform.Compatibility
 
 				case ShellNavigationSource.ShellSectionChanged:
 					if (_currentFragment != null)
-						t.HideEx(_currentFragment.Fragment);
+						t.RemoveEx(_currentFragment.Fragment);
 
 					if (!ChildFragmentManager.Contains(target.Fragment))
 						t.AddEx(GetNavigationTarget().Id, target.Fragment);
