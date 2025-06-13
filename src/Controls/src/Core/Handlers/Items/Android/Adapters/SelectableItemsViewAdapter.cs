@@ -13,9 +13,14 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 	{
 		List<SelectableViewHolder> _currentViewHolders = new List<SelectableViewHolder>();
 
+		int _adapterPosition;
+		object _previousSelectedItem = null;
+		SelectableItemsView _selectableItemsView;
+
 		protected internal SelectableItemsViewAdapter(TItemsView selectableItemsView,
 			Func<View, Context, ItemContentView> createView = null) : base(selectableItemsView, createView)
 		{
+			_selectableItemsView = selectableItemsView;
 		}
 
 		public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
@@ -64,7 +69,7 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 				return;
 			}
 
-			var position = GetPositionForItem(selectedItem);
+			int position = ItemsView.SelectionMode == SelectionMode.Multiple ? GetPositionForItem(selectedItem) : _adapterPosition;
 
 			for (int i = 0; i < _currentViewHolders.Count; i++)
 			{
@@ -125,6 +130,7 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 		{
 			if (adapterPosition >= 0 && adapterPosition < ItemsSource?.Count)
 			{
+				_adapterPosition = adapterPosition;
 				UpdateMauiSelection(adapterPosition);
 			}
 		}
@@ -140,6 +146,13 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 					return;
 				case SelectionMode.Single:
 					ItemsView.SelectedItem = ItemsSource.GetItem(adapterPosition);
+					_previousSelectedItem = ItemsView.SelectedItem;
+					// if adapterPosition is valid and the item is not already selected, we need to update the selection manually
+					if (adapterPosition < _currentViewHolders.Count && adapterPosition >= 0 && !_currentViewHolders[adapterPosition].IsSelected)
+					{
+						_selectableItemsView.SelectedItemPropertyChanged(_previousSelectedItem, ItemsView.SelectedItem);
+					}
+
 					return;
 				case SelectionMode.Multiple:
 					var item = ItemsSource.GetItem(adapterPosition);
