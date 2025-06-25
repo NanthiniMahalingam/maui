@@ -235,7 +235,10 @@ namespace Microsoft.Maui.Controls.Platform
 
 				if (attributes is not null)
 				{
-					dialog.Window.SetSoftInputMode(attributes.SoftInputMode);
+					// For modal dialogs, use AdjustUnspecified to maintain vertical centering
+					// when the keyboard appears, instead of copying the main activity's SoftInputMode
+					// which might be AdjustResize or AdjustPan that would move the dialog
+					dialog.Window.SetSoftInputMode(SoftInput.AdjustUnspecified);
 				}
 
 				if (mainActivityWindow is not null)
