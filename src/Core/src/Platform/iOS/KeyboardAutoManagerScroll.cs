@@ -123,6 +123,14 @@ public static class KeyboardAutoManagerScroll
 				return;
 			}
 
+			// Exclude modal dialogs from keyboard auto-scrolling to maintain their vertical centering
+			if (View.FindResponder<UIViewController>() is UIViewController viewController &&
+				viewController.PresentingViewController is not null)
+			{
+				IsKeyboardAutoScrollHandling = false;
+				return;
+			}
+
 			CursorRect = null;
 
 			ContainerView = View.GetContainerView();
