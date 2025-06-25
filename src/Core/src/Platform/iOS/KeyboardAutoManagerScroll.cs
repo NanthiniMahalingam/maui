@@ -123,9 +123,13 @@ public static class KeyboardAutoManagerScroll
 				return;
 			}
 
-			// Exclude modal dialogs from keyboard auto-scrolling to maintain their vertical centering
+			// Only exclude actual alert controllers and small modal dialogs from keyboard auto-scrolling
+			// Regular content pages in modal presentations should still get keyboard handling
 			if (View.FindResponder<UIViewController>() is UIViewController viewController &&
-				viewController.PresentingViewController is not null)
+				viewController.PresentingViewController is not null &&
+				(viewController is UIAlertController || 
+				 viewController.ModalPresentationStyle == UIModalPresentationStyle.FormSheet ||
+				 viewController.ModalPresentationStyle == UIModalPresentationStyle.PageSheet))
 			{
 				IsKeyboardAutoScrollHandling = false;
 				return;

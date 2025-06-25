@@ -15,11 +15,11 @@ using TabbedViewHandler = Microsoft.Maui.Controls.Handlers.Compatibility.TabbedR
 
 namespace Microsoft.Maui.DeviceTests
 {
-	[Category(TestCategory.Modal)]
+	[Category(TestCategory.Entry)]
 #if ANDROID || IOS || MACCATALYST
 	[Collection(ControlsHandlerTestBase.RunInNewWindowCollection)]
 #endif
-	public partial class ModalKeyboardTests : ControlsHandlerTestBase
+	public partial class ContentPageKeyboardTests : ControlsHandlerTestBase
 	{
 		void SetupBuilder()
 		{
@@ -38,40 +38,62 @@ namespace Microsoft.Maui.DeviceTests
 		}
 
 		[Fact]
-		public async Task ModalDialogMaintainsVerticalCenteringWithKeyboard()
+		public async Task ContentPageHandlesKeyboardProperly()
 		{
 			SetupBuilder();
-			var windowPage = new ContentPage()
+			var contentPage = new ContentPage()
 			{
-				Content = new Label() { Text = "Main Page" }
-			};
-
-			var modalPage = new ContentPage()
-			{
-				Content = new StackLayout
+				Content = new Grid
 				{
+					RowDefinitions =
+					{
+						new RowDefinition { Height = GridLength.Star },
+						new RowDefinition { Height = new GridLength(1.5, GridUnitType.Star) },
+						new RowDefinition { Height = GridLength.Auto },
+						new RowDefinition { Height = GridLength.Star },
+						new RowDefinition { Height = new GridLength(0.75, GridUnitType.Star) }
+					},
 					Children =
 					{
-						new Label { Text = "Modal Dialog" },
-						new Entry { Placeholder = "Enter text to show keyboard" }
+						new VerticalStackLayout
+						{
+							Spacing = 2,
+							Margin = new Thickness(0, 4, 0, 4),
+							Children =
+							{
+								new Border
+								{
+									BackgroundColor = Colors.White,
+									Stroke = Color.FromArgb("#66000000"),
+									StrokeThickness = 1,
+									Padding = new Thickness(5, 0),
+									Content = new Entry
+									{
+										TextColor = Color.FromArgb("#DE000000"),
+										Placeholder = "Password: test_Password",
+										IsPassword = true,
+										HeightRequest = 40
+									}
+								}
+							}
+						}.Row(2)
 					}
 				}
 			};
 
-			var window = new Window(windowPage);
+			var window = new Window(contentPage);
 
 			await CreateHandlerAndAddToWindow<IWindowHandler>(window,
 				async (_) =>
 				{
-					await windowPage.Navigation.PushModalAsync(modalPage);
-					await OnLoadedAsync(modalPage.Content);
+					await OnLoadedAsync(contentPage.Content);
 
-					// Test that modal dialog is configured to maintain vertical centering
-					// when keyboard appears
-					AssertModalIsConfiguredForVerticalCentering(modalPage);
+					// Test that content page is configured to handle keyboard properly
+					// without overlapping content and maintaining proper layout
+					AssertContentPageIsConfiguredForKeyboard(contentPage);
 				});
 		}
 
-		partial void AssertModalIsConfiguredForVerticalCentering(Page modalPage);
+		partial void AssertContentPageIsConfiguredForKeyboard(Page contentPage);
 	}
 }
