@@ -11,14 +11,15 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Test content to show overlap -->
+        <!-- Test content to show that it should remain visible when keyboard appears -->
         <Label Grid.Row="0" 
-               Text="This content should remain visible when keyboard appears"
+               Text="This content should remain visible and properly positioned when the Entry below is focused and keyboard appears. The keyboard should not overlap this content."
                VerticalOptions="Center"
                HorizontalOptions="Center"
                AutomationId="TestContentLabel"
                BackgroundColor="LightBlue"
-               Padding="20"/>
+               Padding="20"
+               FontSize="16"/>
 
         <!-- Border with VerticalOptions="End" containing Entry - reproduces the issue -->
         <Border Grid.Row="1"
