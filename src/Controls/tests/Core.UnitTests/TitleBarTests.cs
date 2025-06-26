@@ -21,15 +21,25 @@ namespace Microsoft.Maui.Controls.Core.UnitTests
 			// Trigger template application
 			titleBar.ApplyTemplate();
 
+			// Simulate what happens when visual states change the ForegroundColor
+			titleBar.ForegroundColor = Colors.Red;
+
 			// Apply active state
-			VisualStateManager.GoToState(titleBar, TitleBar.TitleBarActiveState);
+			titleBar.ApplyVisibleState(TitleBar.TitleBarActiveState);
+
+			// Change color as if visual state changed it
+			titleBar.ForegroundColor = Colors.Gray;
 
 			// Apply inactive state
-			VisualStateManager.GoToState(titleBar, TitleBar.TitleBarInactiveState);
+			titleBar.ApplyVisibleState(TitleBar.TitleBarInactiveState);
 
-			// For now, this test just verifies the API works without exceptions
-			// The actual visual verification would require platform-specific testing
-			Assert.True(true);
+			// Verify the basic API works without exceptions and that template elements exist
+			var titleLabel = titleBar.GetTemplateChild(TitleBar.TitleBarTitle);
+			var subtitleLabel = titleBar.GetTemplateChild(TitleBar.TitleBarSubtitle);
+
+			// Template elements should exist after ApplyTemplate and ApplyVisibleState calls
+			Assert.NotNull(titleLabel);
+			Assert.NotNull(subtitleLabel);
 		}
 
 		[Fact, Category(TestCategory.Memory)]
