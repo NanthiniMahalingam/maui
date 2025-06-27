@@ -2,11 +2,16 @@ using System;
 using Microsoft.Maui.Hosting;
 using Microsoft.Maui.LifecycleEvents;
 using UIKit;
+using System.Collections.Concurrent;
+using Foundation;
 
 namespace Microsoft.Maui.LifecycleEvents
 {
 	public static partial class AppHostBuilderExtensions
 	{
+		static NSObject? _windowDidBecomeKeyObserver;
+		static NSObject? _windowDidResignKeyObserver;
+		static readonly ConcurrentDictionary<nint, bool> _windowActivationStates = new();
 		internal static MauiAppBuilder ConfigureCrossPlatformLifecycleEvents(this MauiAppBuilder builder) =>
 			builder.ConfigureLifecycleEvents(events => events.AddiOS(OnConfigureLifeCycle));
 
@@ -15,6 +20,57 @@ namespace Microsoft.Maui.LifecycleEvents
 
 		static void OnConfigureLifeCycle(IiOSLifecycleBuilder iOS)
 		{
+#if MACCATALYST
+			_windowDidBecomeKeyObserver = NSNotificationCenter.DefaultCenter.AddObserver(
+				new NSString("NSWindowDidBecomeKeyNotification"), _ =>
+				{
+					if (!UIApplication.SharedApplication.Delegate.HasSceneManifest())
+					{
+						// For non-scene based apps, get the main window
+						//UIApplication.SharedApplication.GetWindow()?.Activated();
+						var window = UIApplication.SharedApplication.GetWindow();
+						if (window != null)
+						{
+							var windowKey = (window.Handler?.PlatformView is NSObject nsObj ? (nint)nsObj.Handle : (nint)0);
+							if (windowKey != nint.Zero)
+							{
+								bool isActive = false;
+								_windowActivationStates.TryGetValue(windowKey, out isActive);
+								if (!isActive)
+								{
+									_windowActivationStates[windowKey] = true;
+									window.Focused();
+								}
+							}
+						}
+					}
+				});
+			_windowDidResignKeyObserver = NSNotificationCenter.DefaultCenter.AddObserver(
+				new NSString("NSWindowDidResignKeyNotification"), _ =>
+				{
+					if (!UIApplication.SharedApplication.Delegate.HasSceneManifest())
+					{
+						// For non-scene based apps, get the main window
+						var window = UIApplication.SharedApplication.GetWindow();
+						if (window != null)
+						{
+							var windowKey = (window.Handler?.PlatformView is NSObject nsObj ? (nint)nsObj.Handle : nint.Zero);
+							if (windowKey != nint.Zero)
+							{
+								bool isActive = true;
+								_windowActivationStates.TryGetValue(windowKey, out isActive);
+								if (isActive)
+								{
+									_windowActivationStates[windowKey] = false;
+									window.Unfocused();
+								}
+							}
+						}
+					}
+				});
+
+#endif
+
 			iOS = iOS
 					.OnPlatformWindowCreated((window) =>
 					{
@@ -24,6 +80,20 @@ namespace Microsoft.Maui.LifecycleEvents
 					})
 					.WillTerminate(app =>
 					{
+						// Clear activation states on termination and cleanup observers
+						_windowActivationStates.Clear();
+
+						if (_windowDidBecomeKeyObserver != null)
+						{
+							NSNotificationCenter.DefaultCenter.RemoveObserver(_windowDidBecomeKeyObserver);
+							_windowDidBecomeKeyObserver = null;
+						}
+
+						if (_windowDidResignKeyObserver != null)
+						{
+							NSNotificationCenter.DefaultCenter.RemoveObserver(_windowDidResignKeyObserver);
+							_windowDidResignKeyObserver = null;
+						}
 						// By this point if we were a multi window app, the GetWindow would be null anyway
 						app.GetWindow()?.Destroying();
 						KeyboardAutoManagerScroll.Disconnect();

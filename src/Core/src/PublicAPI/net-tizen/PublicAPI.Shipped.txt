@@ -1358,6 +1358,8 @@ Microsoft.Maui.IWindow.Content.get -> Microsoft.Maui.IView?
 Microsoft.Maui.IWindow.Created() -> void
 Microsoft.Maui.IWindow.Deactivated() -> void
 Microsoft.Maui.IWindow.Destroying() -> void
+Microsoft.Maui.IWindow.Focused() -> void
+Microsoft.Maui.IWindow.Unfocused() -> void
 Microsoft.Maui.IWindow.DisplayDensityChanged(float displayDensity) -> void
 Microsoft.Maui.IWindow.FlowDirection.get -> Microsoft.Maui.FlowDirection
 Microsoft.Maui.IWindow.FrameChanged(Microsoft.Maui.Graphics.Rect frame) -> void

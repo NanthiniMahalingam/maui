@@ -7145,6 +7145,8 @@ Microsoft.Maui.Controls.Window.AddOverlay(Microsoft.Maui.IWindowOverlay! overlay
 Microsoft.Maui.Controls.Window.Backgrounding -> System.EventHandler<Microsoft.Maui.Controls.BackgroundingEventArgs!>?
 Microsoft.Maui.Controls.Window.Created -> System.EventHandler?
 Microsoft.Maui.Controls.Window.Deactivated -> System.EventHandler?
+Microsoft.Maui.Controls.Window.Focused -> System.EventHandler?
+Microsoft.Maui.Controls.Window.UnFocused -> System.EventHandler?
 Microsoft.Maui.Controls.Window.Destroying -> System.EventHandler?
 Microsoft.Maui.Controls.Window.DisplayDensity.get -> float
 Microsoft.Maui.Controls.Window.DisplayDensityChanged -> System.EventHandler<Microsoft.Maui.Controls.DisplayDensityChangedEventArgs!>?
@@ -7680,6 +7682,8 @@ virtual Microsoft.Maui.Controls.Window.OnBackgrounding(Microsoft.Maui.IPersisted
 virtual Microsoft.Maui.Controls.Window.OnCreated() -> void
 virtual Microsoft.Maui.Controls.Window.OnDeactivated() -> void
 virtual Microsoft.Maui.Controls.Window.OnDestroying() -> void
+virtual Microsoft.Maui.Controls.Window.OnFocused() -> void
+virtual Microsoft.Maui.Controls.Window.OnUnfocused() -> void
 virtual Microsoft.Maui.Controls.Window.OnDisplayDensityChanged(float displayDensity) -> void
 virtual Microsoft.Maui.Controls.Window.OnResumed() -> void
 virtual Microsoft.Maui.Controls.Window.OnStopped() -> void

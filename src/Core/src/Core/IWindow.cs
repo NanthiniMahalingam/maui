@@ -104,6 +104,16 @@ namespace Microsoft.Maui
 		void Deactivated();
 
 		/// <summary>
+		/// Occurs when the Window is focused.
+		/// </summary>
+		void Focused();
+
+		/// <summary>
+		/// Occurs when the Window is unfocused.
+		/// </summary>
+		void Unfocused();
+
+		/// <summary>
 		/// Occurs when the Window is stopped.
 		/// </summary>
 		void Stopped();

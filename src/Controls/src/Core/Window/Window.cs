@@ -255,6 +255,8 @@ namespace Microsoft.Maui.Controls
 		public event EventHandler? Resumed;
 		public event EventHandler? Activated;
 		public event EventHandler? Deactivated;
+		public event EventHandler? Focused;
+		public event EventHandler? UnFocused;
 		public event EventHandler? Stopped;
 		public event EventHandler? Destroying;
 		public event EventHandler<BackgroundingEventArgs>? Backgrounding;
@@ -264,6 +266,8 @@ namespace Microsoft.Maui.Controls
 		protected virtual void OnResumed() { }
 		protected virtual void OnActivated() { }
 		protected virtual void OnDeactivated() { }
+		protected virtual void OnFocused() { }
+		protected virtual void OnUnfocused() { }
 		protected virtual void OnStopped() { }
 		protected virtual void OnDestroying() { }
 		protected virtual void OnBackgrounding(IPersistedState state) { }
@@ -521,6 +525,18 @@ namespace Microsoft.Maui.Controls
 			IsActivated = false;
 			Deactivated?.Invoke(this, EventArgs.Empty);
 			OnDeactivated();
+		}
+
+		void IWindow.Focused()
+		{
+			Focused?.Invoke(this, EventArgs.Empty);
+			OnFocused();
+		}
+
+		void IWindow.Unfocused()
+		{
+			UnFocused?.Invoke(this, EventArgs.Empty);
+			OnUnfocused();
 		}
 
 		void IWindow.Stopped()

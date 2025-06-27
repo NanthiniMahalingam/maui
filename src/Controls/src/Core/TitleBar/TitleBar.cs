@@ -275,9 +275,13 @@ namespace Microsoft.Maui.Controls
 			{
 				Window.Activated -= Window_Activated;
 				Window.Deactivated -= Window_Deactivated;
+				Window.Focused -= Window_Focused;
+				Window.UnFocused -= Window_UnFocused;
 
 				Window.Activated += Window_Activated;
 				Window.Deactivated += Window_Deactivated;
+				Window.Focused += Window_Focused;
+				Window.UnFocused += Window_UnFocused;
 			}
 		}
 
@@ -333,6 +337,16 @@ namespace Microsoft.Maui.Controls
 		private void Window_Activated(object? sender, System.EventArgs e)
 		{
 			ApplyVisibleState(TitleBarActiveState);
+		}
+
+		private void Window_Focused(object? sender, System.EventArgs e)
+		{
+			ApplyVisibleState(TitleBarActiveState);
+		}
+
+		private void Window_UnFocused(object? sender, System.EventArgs e)
+		{
+			ApplyVisibleState(TitleBarInactiveState);
 		}
 
 		private void Window_Deactivated(object? sender, System.EventArgs e)
