@@ -228,11 +228,5 @@ namespace Microsoft.Maui.Controls
 			var args = new SelectionChangedEventArgs(previousSelection, newSelection);
 			SelectionPropertyChanged(selectableItemsView, args);
 		}
-
-		internal void SelectedItemPropertyChanged(object oldValue, object newValue)
-		{
-			SelectionPropertyChanged(this, new SelectionChangedEventArgs(oldValue, newValue));
-			OnPropertyChanged(SelectedItemProperty.PropertyName);
-		}
 	}
 }
