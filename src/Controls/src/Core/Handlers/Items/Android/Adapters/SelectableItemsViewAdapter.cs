@@ -12,15 +12,12 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 		where TItemsSource : IItemsViewSource
 	{
 		List<SelectableViewHolder> _currentViewHolders = new List<SelectableViewHolder>();
-
-		int _adapterPosition;
-		object _previousSelectedItem = null;
-		SelectableItemsView _selectableItemsView;
+		int? _selectedPosition = null;
+		HashSet<int> _selectedPositions = new HashSet<int>();
 
 		protected internal SelectableItemsViewAdapter(TItemsView selectableItemsView,
 			Func<View, Context, ItemContentView> createView = null) : base(selectableItemsView, createView)
 		{
-			_selectableItemsView = selectableItemsView;
 		}
 
 		public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
@@ -62,21 +59,70 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 			}
 		}
 
+		void SelectableClicked(object sender, int adapterPosition)
+		{
+			if (adapterPosition >= 0 && adapterPosition < ItemsSource?.Count)
+			{
+				var mode = ItemsView.SelectionMode;
+				switch (mode)
+				{
+					case SelectionMode.Single:
+						_selectedPosition = adapterPosition;
+						_selectedPositions.Clear();
+						_selectedPositions.Add(adapterPosition);
+						UpdateMauiSelection(adapterPosition);
+						NotifySelectionChanged();
+						break;
+					case SelectionMode.Multiple:
+						if (_selectedPositions.Contains(adapterPosition))
+							_selectedPositions.Remove(adapterPosition);
+						else
+							_selectedPositions.Add(adapterPosition);
+						UpdateMauiSelection(adapterPosition);
+						NotifySelectionChanged();
+						break;
+				}
+			}
+		}
+
 		internal void MarkPlatformSelection(object selectedItem)
 		{
-			if (selectedItem == null)
-			{
-				return;
-			}
-
-			int position = ItemsView.SelectionMode == SelectionMode.Multiple ? GetPositionForItem(selectedItem) : _adapterPosition;
-
+			var mode = ItemsView.SelectionMode;
 			for (int i = 0; i < _currentViewHolders.Count; i++)
 			{
-				if (_currentViewHolders[i].BindingAdapterPosition == position)
+				var holder = _currentViewHolders[i];
+				if (mode == SelectionMode.Single)
 				{
-					_currentViewHolders[i].IsSelected = true;
-					return;
+					holder.IsSelected = _selectedPosition.HasValue && holder.BindingAdapterPosition == _selectedPosition.Value;
+				}
+				else if (mode == SelectionMode.Multiple)
+				{
+					holder.IsSelected = _selectedPositions.Contains(holder.BindingAdapterPosition);
+				}
+				else
+				{
+					holder.IsSelected = false;
+				}
+			}
+		}
+
+		void NotifySelectionChanged()
+		{
+			var mode = ItemsView.SelectionMode;
+			for (int i = 0; i < _currentViewHolders.Count; i++)
+			{
+				var holder = _currentViewHolders[i];
+				if (mode == SelectionMode.Single)
+				{
+					holder.IsSelected = _selectedPosition.HasValue && holder.BindingAdapterPosition == _selectedPosition.Value;
+				}
+				else if (mode == SelectionMode.Multiple)
+				{
+					holder.IsSelected = _selectedPositions.Contains(holder.BindingAdapterPosition);
+				}
+				else
+				{
+					holder.IsSelected = false;
 				}
 			}
 		}
@@ -115,24 +161,15 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 		bool PositionIsSelected(int position)
 		{
 			var selectedPositions = GetSelectedPositions();
-			foreach (var selectedPosition in selectedPositions)
-			{
-				if (selectedPosition == position)
-				{
-					return true;
-				}
-			}
+			_selectedPosition = selectedPositions.Length > 0 ? selectedPositions[0] : null;
+			_selectedPositions = new HashSet<int>(selectedPositions);
 
-			return false;
-		}
-
-		void SelectableClicked(object sender, int adapterPosition)
-		{
-			if (adapterPosition >= 0 && adapterPosition < ItemsSource?.Count)
+			return ItemsView.SelectionMode switch
 			{
-				_adapterPosition = adapterPosition;
-				UpdateMauiSelection(adapterPosition);
-			}
+				SelectionMode.Single => _selectedPosition == position,
+				SelectionMode.Multiple => _selectedPositions.Contains(position),
+				_ => false
+			};
 		}
 
 		void UpdateMauiSelection(int adapterPosition)
@@ -146,13 +183,6 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 					return;
 				case SelectionMode.Single:
 					ItemsView.SelectedItem = ItemsSource.GetItem(adapterPosition);
-					_previousSelectedItem = ItemsView.SelectedItem;
-					// if adapterPosition is valid and the item is not already selected, we need to update the selection manually
-					if (adapterPosition < _currentViewHolders.Count && adapterPosition >= 0 && !_currentViewHolders[adapterPosition].IsSelected)
-					{
-						_selectableItemsView.SelectedItemPropertyChanged(_previousSelectedItem, ItemsView.SelectedItem);
-					}
-
 					return;
 				case SelectionMode.Multiple:
 					var item = ItemsSource.GetItem(adapterPosition);
