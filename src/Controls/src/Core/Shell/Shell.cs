@@ -775,6 +775,12 @@ namespace Microsoft.Maui.Controls
 					target = pivot;
 				}
 
+				// For appearance changes, ensure we only notify observers that are in the same navigational context
+				if (appearanceSet && !AreInSameNavigationContext(source, pivot))
+				{
+					continue;
+				}
+
 				while (!Application.IsApplicationOrWindowOrNull(leaf))
 				{
 					if (leaf == target)
@@ -788,6 +794,31 @@ namespace Microsoft.Maui.Controls
 					leaf = leaf.Parent;
 				}
 			}
+		}
+
+		bool AreInSameNavigationContext(Element source, Element pivot)
+		{
+			// Find the ShellSection for both elements
+			var sourceSection = FindShellSection(source);
+			var pivotSection = FindShellSection(pivot);
+
+			// If either doesn't have a section, they're not in the same context
+			if (sourceSection == null || pivotSection == null)
+				return false;
+
+			// They must be in the same ShellSection to be in the same navigation context
+			return sourceSection == pivotSection;
+		}
+
+		ShellSection FindShellSection(Element element)
+		{
+			while (element != null && !Application.IsApplicationOrWindowOrNull(element))
+			{
+				if (element is ShellSection shellSection)
+					return shellSection;
+				element = element.Parent;
+			}
+			return null;
 		}
 
 		ShellNavigationState IShellController.GetNavigationState(ShellItem shellItem, ShellSection shellSection, ShellContent shellContent, bool includeStack)

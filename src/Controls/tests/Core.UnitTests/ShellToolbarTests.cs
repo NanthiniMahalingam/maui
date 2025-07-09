@@ -303,5 +303,44 @@ namespace Microsoft.Maui.Controls.Core.UnitTests
 
 			Assert.True(toolbar.IsVisible);
 		}
+
+		[Fact]
+		public void ShellColorsPreservedDuringTabNavigation()
+		{
+			// Create shell with two tabs having different colors
+			var shell = new TestShell();
+
+			// Create first tab with blue colors
+			var homeTab = new Tab { Title = "Home" };
+			var homePage = new ContentPage { Title = "Home Page" };
+			Shell.SetBackgroundColor(homePage, Colors.Blue);
+			Shell.SetForegroundColor(homePage, Colors.White);
+			homeTab.Items.Add(new ShellContent { Content = homePage });
+
+			// Create second tab with red colors
+			var otherTab = new Tab { Title = "Other" };
+			var otherPage = new ContentPage { Title = "Other Page" };
+			Shell.SetBackgroundColor(otherPage, Colors.Red);
+			Shell.SetForegroundColor(otherPage, Colors.White);
+			otherTab.Items.Add(new ShellContent { Content = otherPage });
+
+			shell.Items.Add(homeTab);
+			shell.Items.Add(otherTab);
+
+			// Navigate to home tab
+			shell.CurrentItem = homeTab;
+			var homeAppearance = shell.GetAppearanceForPivot(homeTab);
+			Assert.Equal(Colors.Blue, homeAppearance.BackgroundColor);
+
+			// Navigate to other tab
+			shell.CurrentItem = otherTab;
+			var otherAppearance = shell.GetAppearanceForPivot(otherTab);
+			Assert.Equal(Colors.Red, otherAppearance.BackgroundColor);
+
+			// Navigate back to home tab - should preserve blue color
+			shell.CurrentItem = homeTab;
+			var homeAppearanceAfter = shell.GetAppearanceForPivot(homeTab);
+			Assert.Equal(Colors.Blue, homeAppearanceAfter.BackgroundColor);
+		}
 	}
 }

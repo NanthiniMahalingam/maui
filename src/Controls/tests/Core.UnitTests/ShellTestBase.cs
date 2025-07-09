@@ -472,6 +472,13 @@ namespace Microsoft.Maui.Controls.Core.UnitTests
 					return (CurrentItem.CurrentItem as TestShellSection)?.LastPopWasAnimated;
 				}
 			}
+
+			public ShellAppearance GetAppearanceForPivot(Element pivot)
+			{
+				return (ShellAppearance)typeof(Shell)
+					.GetMethod("GetAppearanceForPivot", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+					.Invoke(this, new object[] { pivot });
+			}
 		}
 
 
