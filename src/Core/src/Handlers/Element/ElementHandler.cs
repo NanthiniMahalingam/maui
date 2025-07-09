@@ -76,7 +76,11 @@ namespace Microsoft.Maui.Handlers
 				}
 			}
 
-			_mapper.UpdateProperties(this, VirtualView);
+			// Add null check to prevent potential crash during property updates
+			if (VirtualView is not null && _mapper is not null)
+			{
+				_mapper.UpdateProperties(this, VirtualView);
+			}
 		}
 
 		public virtual void UpdateValue(string property)
