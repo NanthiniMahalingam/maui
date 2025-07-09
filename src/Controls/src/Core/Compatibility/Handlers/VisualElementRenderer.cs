@@ -289,7 +289,11 @@ namespace Microsoft.Maui.Controls.Handlers.Compatibility
 				ProcessAutoPackage(view);
 			}
 
-			_mapper.UpdateProperties(nativeViewHandler, currentVirtualView);
+			// Add null check to prevent potential crash during property updates
+			if (currentVirtualView is not null && nativeViewHandler is not null)
+			{
+				_mapper.UpdateProperties(nativeViewHandler, currentVirtualView);
+			}
 		}
 
 		static partial void ProcessAutoPackage(Maui.IElement element);
@@ -302,7 +306,16 @@ namespace Microsoft.Maui.Controls.Handlers.Compatibility
 			SetVirtualView(view, this, OnElementChanged, ref _tempElement, ref _mapper, _defaultMapper, AutoPackage);
 
 			// We use _virtualView as a WeakReference, and clear _tempElement
-			_virtualView = _tempElement is null ? null : new(_tempElement);
+			// For .NET 9 compatibility, ensure we don't create WeakReference for null elements
+			// and that the element is still valid before creating the WeakReference
+			if (_tempElement is not null)
+			{
+				_virtualView = new(_tempElement);
+			}
+			else
+			{
+				_virtualView = null;
+			}
 			_tempElement = null;
 		}
 #else
