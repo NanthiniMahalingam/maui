@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Maui.Controls.Sample.Issues.IssueVerticalGridShrinking">
+
+    <Grid RowDefinitions="Auto,*">
+        <Label Text="VerticalGrid items should fill available width when resized" 
+               AutomationId="InstructionLabel"
+               Grid.Row="0"
+               FontSize="16"
+               Margin="10"/>
+        
+        <CollectionView x:Name="collectionView" 
+                       AutomationId="TestCollectionView"
+                       Grid.Row="1"
+                       Margin="10"
+                       BackgroundColor="LightGray"
+                       ItemsSource="{Binding Items}">
+            
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" 
+                               Span="2" 
+                               HorizontalItemSpacing="5"
+                               VerticalItemSpacing="5"/>
+            </CollectionView.ItemsLayout>
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid BackgroundColor="LightBlue" 
+                          Padding="10"
+                          AutomationId="ItemGrid">
+                        <Label Text="{Binding}" 
+                               FontSize="14" 
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               AutomationId="ItemLabel"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+
+</ContentPage>
