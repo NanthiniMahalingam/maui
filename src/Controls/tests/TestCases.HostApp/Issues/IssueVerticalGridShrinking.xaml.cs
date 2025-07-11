@@ -10,13 +10,13 @@ namespace Maui.Controls.Sample.Issues
 		public IssueVerticalGridShrinking()
 		{
 			InitializeComponent();
-			
+
 			Items = new ObservableCollection<string>();
 			for (int i = 1; i <= 20; i++)
 			{
 				Items.Add($"Item {i}");
 			}
-			
+
 			BindingContext = this;
 		}
 	}
