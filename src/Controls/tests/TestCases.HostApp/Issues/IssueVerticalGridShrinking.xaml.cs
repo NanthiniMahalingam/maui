@@ -14,7 +14,8 @@ namespace Maui.Controls.Sample.Issues
 			Items = new ObservableCollection<string>();
 			for (int i = 1; i <= 20; i++)
 			{
-				Items.Add($"Item {i}");
+				// Use longer text to test wrapping behavior
+				Items.Add($"Item {i} with longer text content");
 			}
 
 			BindingContext = this;

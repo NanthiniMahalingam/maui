@@ -31,8 +31,10 @@
                           AutomationId="ItemGrid">
                         <Label Text="{Binding}" 
                                FontSize="14" 
-                               HorizontalOptions="Center"
+                               HorizontalOptions="Fill"
                                VerticalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               LineBreakMode="WordWrap"
                                AutomationId="ItemLabel"/>
                     </Grid>
                 </DataTemplate>

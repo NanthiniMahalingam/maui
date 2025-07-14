@@ -115,19 +115,11 @@ namespace Microsoft.Maui.Controls.Platform
 
 			if (_orientation == Orientation.Horizontal)
 			{
-				// Calculate the ideal space per item
-				var idealSpace = _wrapGrid.ActualHeight / Span;
-				// Ensure items get reasonable minimum space to prevent content cropping
-				// Use Math.Max to balance space distribution with content requirements
-				_wrapGrid.ItemHeight = Math.Max(40, Math.Round(idealSpace));
+				_wrapGrid.ItemHeight = Math.Round(_wrapGrid.ActualHeight / Span);
 			}
 			else
 			{
-				// Calculate the ideal space per item  
-				var idealSpace = _wrapGrid.ActualWidth / Span;
-				// Ensure items get reasonable minimum space to prevent content cropping
-				// Use Math.Max to balance space distribution with content requirements
-				_wrapGrid.ItemWidth = Math.Max(80, Math.Round(idealSpace));
+				_wrapGrid.ItemWidth = Math.Round(_wrapGrid.ActualWidth / Span);
 			}
 		}
 
