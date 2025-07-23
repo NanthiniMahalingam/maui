@@ -88,6 +88,19 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 		internal void MarkPlatformSelection(object selectedItem)
 		{
 			var mode = ItemsView.SelectionMode;
+
+
+			_selectedPosition = GetPositionForItem(selectedItem);
+			if (mode == SelectionMode.Multiple)
+			{
+				_selectedPositions.Add(_selectedPosition.Value);
+			}
+			else if (_selectedPosition.HasValue)
+			{
+				_selectedPositions.Clear();
+				_selectedPositions.Add(_selectedPosition.Value);
+			}
+
 			for (int i = 0; i < _currentViewHolders.Count; i++)
 			{
 				var holder = _currentViewHolders[i];
