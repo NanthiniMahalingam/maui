@@ -52,7 +52,26 @@ namespace Microsoft.Maui.Platform
 
 		public static void UpdateRotationY(this AView platformView, IView view)
 		{
-			platformView.RotationY = (float)view.RotationY;
+			var rotationY = (float)view.RotationY;
+			if (Math.Abs(rotationY) > 0.1f)
+			{
+				// Calculate camera distance based on physical screen dimensions
+				var displayMetrics = platformView.Resources?.DisplayMetrics;
+				if (displayMetrics != null)
+				{
+					// Physical size of the screen in inches
+					float widthInches = displayMetrics.WidthPixels / displayMetrics.Xdpi;
+					float heightInches = displayMetrics.HeightPixels / displayMetrics.Ydpi;
+					double screenDiagonalInches = Math.Sqrt(widthInches * widthInches + heightInches * heightInches);
+
+					// Camera distance: diagonal size (inches) × DPI (already in pixels)
+					float cameraDistance = (float)(screenDiagonalInches * (double)displayMetrics.DensityDpi
+						* (platformView.Resources?.DisplayMetrics?.Density ?? 1.0f));
+					platformView.SetCameraDistance(cameraDistance);
+				}
+			}
+
+			platformView.RotationY = rotationY;
 		}
 
 		public static void UpdateAnchorX(this AView platformView, IView view)
