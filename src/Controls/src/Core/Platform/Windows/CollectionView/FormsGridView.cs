@@ -115,11 +115,11 @@ namespace Microsoft.Maui.Controls.Platform
 
 			if (_orientation == Orientation.Horizontal)
 			{
-				_wrapGrid.ItemHeight = Math.Floor(_wrapGrid.ActualHeight / Span);
+				_wrapGrid.ItemHeight = Math.Round(_wrapGrid.ActualHeight / Span);
 			}
 			else
 			{
-				_wrapGrid.ItemWidth = Math.Floor(_wrapGrid.ActualWidth / Span);
+				_wrapGrid.ItemWidth = Math.Round(_wrapGrid.ActualWidth / Span);
 			}
 		}
 
