@@ -13,6 +13,12 @@ namespace Microsoft.Maui.Handlers
 
 			platformView?.SetIndicatorView(VirtualView);
 
+			if (platformView != null)
+			{
+				platformView.SemanticContentAttribute = VirtualView.FlowDirection == FlowDirection.RightToLeft ?
+					UISemanticContentAttribute.ForceRightToLeft : UISemanticContentAttribute.ForceLeftToRight;
+			}
+
 			UpdateIndicator();
 		}
 
