@@ -13,12 +13,6 @@ namespace Microsoft.Maui.Handlers
 
 			platformView?.SetIndicatorView(VirtualView);
 
-			if (platformView != null)
-			{
-				platformView.SemanticContentAttribute = VirtualView.FlowDirection == FlowDirection.RightToLeft ?
-					UISemanticContentAttribute.ForceRightToLeft : UISemanticContentAttribute.ForceLeftToRight;
-			}
-
 			UpdateIndicator();
 		}
 
@@ -37,6 +31,11 @@ namespace Microsoft.Maui.Handlers
 		public static void MapPosition(IIndicatorViewHandler handler, IIndicatorView indicator)
 		{
 			handler.PlatformView?.UpdatePosition();
+		}
+
+		public static void MapFlowDirection(IIndicatorViewHandler handler, IIndicatorView indicator)
+		{
+			handler.PlatformView?.UpdateIndicatorFlowDirection(indicator);
 		}
 
 		public static void MapHideSingle(IIndicatorViewHandler handler, IIndicatorView indicator)
