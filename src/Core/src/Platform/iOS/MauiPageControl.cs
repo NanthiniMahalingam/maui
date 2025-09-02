@@ -55,7 +55,7 @@ namespace Microsoft.Maui.Platform
 
 			UpdateIndicatorSize();
 
-			if (_indicatorView?.TryGetTarget(out var indicatorView) == true && (indicatorView as ITemplatedIndicatorView)?.IndicatorsLayoutOverride is not null)
+			if (_indicatorView?.TryGetTarget(out var indicatorView) == true && (indicatorView as ITemplatedIndicatorView)?.IndicatorsLayoutOverride is not null && indicatorView.FlowDirection == FlowDirection.RightToLeft)
 			{
 				// Set the frame value for the indicator layout view to align the item based on the horizontal option (Start or End)
 				Subviews[0].Frame = new CGRect(0, Subviews[0].Frame.Y, Subviews[0].Frame.Width, Subviews[0].Frame.Height);
