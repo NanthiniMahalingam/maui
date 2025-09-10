@@ -6,6 +6,7 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 	public interface IItemsViewSource : IDisposable
 	{
 		int Count { get; }
+		int GroupCount { get; }
 
 		int GetPosition(object item);
 		object GetItem(int position);

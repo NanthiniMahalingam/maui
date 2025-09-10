@@ -32,6 +32,10 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 					 + groupContents;
 			}
 		}
+		public int GroupCount
+		{
+			get { return _groupSource.Count; }
+		}
 
 		public bool HasHeader { get; set; }
 		public bool HasFooter { get; set; }

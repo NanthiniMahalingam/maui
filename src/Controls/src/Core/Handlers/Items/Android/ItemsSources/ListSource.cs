@@ -18,6 +18,7 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 			_itemsSource = list;
 		}
 
+		public int GroupCount => -1;
 		public ListSource(IEnumerable<object> enumerable)
 		{
 			_itemsSource = new List<object>(enumerable);

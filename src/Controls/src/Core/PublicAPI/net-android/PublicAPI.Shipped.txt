@@ -558,6 +558,7 @@
 ~Microsoft.Maui.Controls.Handlers.Items.IGroupableItemsViewSource.GetGroupItemsViewSource(int groupIndex) -> Microsoft.Maui.Controls.Handlers.Items.IItemsViewSource
 ~Microsoft.Maui.Controls.Handlers.Items.IItemsViewSource.GetItem(int position) -> object
 ~Microsoft.Maui.Controls.Handlers.Items.IItemsViewSource.GetPosition(object item) -> int
+Microsoft.Maui.Controls.Handlers.Items.IItemsViewSource.GroupCount.get -> int
 ~Microsoft.Maui.Controls.Handlers.Items.IMauiRecyclerView<TItemsView>
 ~Microsoft.Maui.Controls.Handlers.Items.IMauiRecyclerView<TItemsView>.ItemsLayout.get -> Microsoft.Maui.Controls.IItemsLayout
 ~Microsoft.Maui.Controls.Handlers.Items.IMauiRecyclerView<TItemsView>.ScrollTo(Microsoft.Maui.Controls.ScrollToRequestEventArgs args) -> void

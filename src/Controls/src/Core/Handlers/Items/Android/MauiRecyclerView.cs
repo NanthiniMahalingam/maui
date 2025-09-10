@@ -451,14 +451,21 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 			if (args.GroupIndex >= 0 &&
 				args.GroupIndex < groupItemSource.Count)
 			{
-				var group = groupItemSource.GetGroupItemsViewSource(args.GroupIndex);
+				var group = groupItemSource.GetGroupItemsViewSource(args.GroupIndex - 1);
 
 				if (group is not null)
 				{
+					var index = args.Index;
+					if (args.Index > groupItemSource.GroupCount)
+					{
+						var getLastIndexInGroup = groupItemSource.GetGroupItemsViewSource(args.GroupIndex - 1).Count;
+						index = getLastIndexInGroup;
+					}
 					// GetItem calls AdjustIndexRequest, which subtracts 1 if we have a header (UngroupedItemsSource does not do this)
-					return group.GetItem(args.Index + 1);
+					return group.GetItem(index - 1);
 				}
 			}
+
 			return groupItemSource.GetItem(args.Index);
 		}
 
@@ -597,7 +604,7 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 		{
 			if (ItemsView.ItemsUpdatingScrollMode == ItemsUpdatingScrollMode.KeepLastItemInView)
 			{
-				ScrollTo(new ScrollToRequestEventArgs(GetLayoutManager().ItemCount, 0,
+				ScrollTo(new ScrollToRequestEventArgs(GetLayoutManager().ItemCount, ItemsViewAdapter.ItemsSource.GroupCount,
 					Microsoft.Maui.Controls.ScrollToPosition.MakeVisible, true));
 			}
 			else if (ItemsView.ItemsUpdatingScrollMode == ItemsUpdatingScrollMode.KeepScrollOffset)

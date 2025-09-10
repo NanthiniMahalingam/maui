@@ -29,7 +29,7 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 		internal event NotifyCollectionChangedEventHandler CollectionItemsSourceChanged;
 
 		public int Count => ItemsCount() + (HasHeader ? 1 : 0) + (HasFooter ? 1 : 0);
-
+		public int GroupCount => ItemsCount() + (HasHeader ? 1 : 0) + (HasFooter ? 1 : 0);
 		public bool HasHeader { get; set; }
 		public bool HasFooter { get; set; }
 
