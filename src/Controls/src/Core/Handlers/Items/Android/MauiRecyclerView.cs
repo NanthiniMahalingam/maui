@@ -34,6 +34,7 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 
 		EmptyViewAdapter _emptyViewAdapter;
 		readonly DataChangeObserver _emptyCollectionObserver;
+		static bool _isScrollToDataChange;
 		readonly DataChangeObserver _itemsUpdateScrollObserver;
 
 		ScrollBarVisibility _defaultHorizontalScrollVisibility = ScrollBarVisibility.Default;
@@ -451,18 +452,27 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 			if (args.GroupIndex >= 0 &&
 				args.GroupIndex < groupItemSource.Count)
 			{
-				var group = groupItemSource.GetGroupItemsViewSource(args.GroupIndex - 1);
+				var group = groupItemSource.GetGroupItemsViewSource(args.GroupIndex);
 
 				if (group is not null)
 				{
 					var index = args.Index;
 					if (args.Index > groupItemSource.GroupCount)
 					{
-						var getLastIndexInGroup = groupItemSource.GetGroupItemsViewSource(args.GroupIndex - 1).Count;
+						var getLastIndexInGroup = groupItemSource.GetGroupItemsViewSource(args.GroupIndex).Count - 1;
 						index = getLastIndexInGroup;
 					}
-					// GetItem calls AdjustIndexRequest, which subtracts 1 if we have a header (UngroupedItemsSource does not do this)
-					return group.GetItem(index - 1);
+
+					if (index < group.Count && index >= 0 && _isScrollToDataChange)
+					{
+						// GetItem calls AdjustIndexRequest, which subtracts 1 if we have a header (UngroupedItemsSource does not do this)
+						return group.GetItem(args.Index + 1);
+					}
+					else
+					{
+						index -= group.HasFooter ? 1 : 0;
+						return group.GetItem(index);
+					}
 				}
 			}
 
@@ -516,6 +526,7 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 		protected virtual void ScrollToRequested(object sender, ScrollToRequestEventArgs args)
 		{
 			(GetSnapManager()?.GetCurrentSnapHelper() as SingleSnapHelper)?.ResetCurrentTargetPosition();
+			_isScrollToDataChange = true;
 			ScrollTo(args);
 		}
 
@@ -604,7 +615,8 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 		{
 			if (ItemsView.ItemsUpdatingScrollMode == ItemsUpdatingScrollMode.KeepLastItemInView)
 			{
-				ScrollTo(new ScrollToRequestEventArgs(GetLayoutManager().ItemCount, ItemsViewAdapter.ItemsSource.GroupCount,
+				_isScrollToDataChange = false;
+				ScrollTo(new ScrollToRequestEventArgs(GetLayoutManager().ItemCount, ItemsViewAdapter.ItemsSource.GroupCount - 1,
 					Microsoft.Maui.Controls.ScrollToPosition.MakeVisible, true));
 			}
 			else if (ItemsView.ItemsUpdatingScrollMode == ItemsUpdatingScrollMode.KeepScrollOffset)
