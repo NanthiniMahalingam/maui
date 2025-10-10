@@ -16,6 +16,7 @@ namespace Microsoft.Maui.Controls.Platform
 			switch (label.TextType)
 			{
 				case TextType.Html:
+					platformLabel.UpdateTextHtml(text);
 					// NOTE: Setting HTML text this will crash with some sort of consistency error.
 					// https://github.com/dotnet/maui/issues/25946
 					// Here we have to dispatch back the the main queue to avoid the crash.
@@ -23,8 +24,6 @@ namespace Microsoft.Maui.Controls.Platform
 					// will be just disappear once we switch.
 					CoreFoundation.DispatchQueue.MainQueue.DispatchAsync(() =>
 					{
-						platformLabel.UpdateTextHtml(text);
-
 						if (label.Handler is LabelHandler labelHandler)
 							Label.MapFormatting(labelHandler, label);
 
