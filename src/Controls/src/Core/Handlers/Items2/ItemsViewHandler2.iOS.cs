@@ -119,7 +119,12 @@ namespace Microsoft.Maui.Controls.Handlers.Items2
 		{
 			if (handler.ItemsView is StructuredItemsView structuredItemsView && structuredItemsView.ItemsLayout is ItemsLayout itemsLayout)
 			{
-				itemsLayout.ItemsUpdatingScrollMode = itemsView.ItemsUpdatingScrollMode;
+				if (itemsLayout.ItemsUpdatingScrollMode != itemsView.ItemsUpdatingScrollMode)
+				{
+					// Update the ItemsLayout when the ItemsUpdatingScrollMode value changes dynamically.
+					itemsLayout.ItemsUpdatingScrollMode = itemsView.ItemsUpdatingScrollMode;
+					handler.UpdateLayout();
+				}
 			}
 		}
 
