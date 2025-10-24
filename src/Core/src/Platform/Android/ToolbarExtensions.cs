@@ -1,4 +1,5 @@
-﻿using AToolbar = AndroidX.AppCompat.Widget.Toolbar;
+﻿using AndroidX.Core.View;
+using AToolbar = AndroidX.AppCompat.Widget.Toolbar;
 
 namespace Microsoft.Maui.Platform
 {
@@ -7,6 +8,7 @@ namespace Microsoft.Maui.Platform
 		public static void UpdateTitle(this AToolbar nativeToolbar, IToolbar toolbar)
 		{
 			nativeToolbar.Title = toolbar?.Title ?? string.Empty;
+			ViewCompat.SetAccessibilityHeading(nativeToolbar, true);
 		}
 	}
 }
