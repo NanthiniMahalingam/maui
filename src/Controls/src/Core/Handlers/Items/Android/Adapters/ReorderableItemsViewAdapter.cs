@@ -75,6 +75,17 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 			return false;
 		}
 
+		internal bool CanReorderBetweenItemsView(int viewholderViewType, int targetViewType)
+		{
+			// Prevent the header or footer from being reordered with items that have different data templates
+			if (_viewTypeDataTemplates.ContainsKey(viewholderViewType) && _viewTypeDataTemplates.ContainsKey(targetViewType))
+			{
+				return true;
+			}
+
+			return false;
+		}
+
 		void SetObserveChanges(IItemsViewSource itemsSource, bool enable)
 		{
 			if (itemsSource is IObservableItemsViewSource observableSource)
