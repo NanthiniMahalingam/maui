@@ -2143,6 +2143,7 @@
 ~override Microsoft.Maui.Controls.Platform.Compatibility.ShellSearchViewAdapter.GetItem(int position) -> Java.Lang.Object
 ~override Microsoft.Maui.Controls.Platform.Compatibility.ShellSearchViewAdapter.GetView(int position, Android.Views.View convertView, Android.Views.ViewGroup parent) -> Android.Views.View
 ~override Microsoft.Maui.Controls.Platform.Compatibility.ShellSectionRenderer.OnCreateView(Android.Views.LayoutInflater inflater, Android.Views.ViewGroup container, Android.OS.Bundle savedInstanceState) -> Android.Views.View
+override Microsoft.Maui.Controls.Platform.Compatibility.ShellContentFragment.OnHiddenChanged(bool hidden) -> void
 ~override Microsoft.Maui.Controls.Platform.GenericAnimatorListener.OnAnimationCancel(Android.Animation.Animator animation) -> void
 ~override Microsoft.Maui.Controls.Platform.GenericAnimatorListener.OnAnimationEnd(Android.Animation.Animator animation) -> void
 ~override Microsoft.Maui.Controls.Platform.GenericAnimatorListener.OnAnimationRepeat(Android.Animation.Animator animation) -> void
