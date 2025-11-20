@@ -248,15 +248,5 @@ namespace Microsoft.Maui.Controls.Platform.Compatibility
 		protected virtual void ResetAppearance() => _appearanceTracker.ResetAppearance(_toolbar, _toolbarTracker);
 
 		protected virtual void SetAppearance(ShellAppearance appearance) => _appearanceTracker.SetAppearance(_toolbar, _toolbarTracker, appearance);
-		public override void OnHiddenChanged(bool hidden)
-		{
-			base.OnHiddenChanged(hidden);
-
-			// When the fragment is hidden, the appearance is not relevant, so we need to reapply the appearance when shell section changed.
-			if (!hidden && _page is not null && _shellContext?.Shell is not null)
-			{
-				((IShellController)_shellContext.Shell).AppearanceChanged(_page, true);
-			}
-		}
 	}
 }
