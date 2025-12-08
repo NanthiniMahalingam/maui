@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Android.Content;
 using Android.Views;
+using AndroidX.Core.Content;
 using AndroidX.Core.Graphics;
 using AndroidX.Core.View;
 using AndroidX.Core.Widget;
@@ -232,6 +233,18 @@ namespace Microsoft.Maui.Platform
 				else if (group.ChildCount > 1 && group.GetChildAt(1) is AppBarLayout secondChild)
 				{
 					appBarLayout = secondChild;
+				}
+			}
+
+			// Apply primary dark color to AppBarLayout background if available		
+			if (appBarLayout is not null)
+			{
+				var colorPrimaryDarkID = appBarLayout?.Context?.Resources?.GetIdentifier("colorPrimaryDark", "color", appBarLayout.Context?.PackageName) ?? 0;
+				if (colorPrimaryDarkID != 0)
+				{
+					int colorDarkInt = ContextCompat.GetColor(appBarLayout?.Context, colorPrimaryDarkID);
+					var appBarColor = new global::Android.Graphics.Color(colorDarkInt);
+					appBarLayout?.SetBackgroundColor(appBarColor);
 				}
 			}
 
