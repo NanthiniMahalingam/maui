@@ -168,7 +168,11 @@ namespace Microsoft.Maui.Controls
 			}
 			if (_navigationView != null)
 			{
-				_navigationView.SelectedItem = null;
+				if (Children.Count > 1)
+				{
+					_navigationView.SelectedItem = null;
+				}
+
 				_navigationView.SelectionChanged -= OnSelectedMenuItemChanged;
 			}
 
