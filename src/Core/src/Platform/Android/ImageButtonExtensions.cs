@@ -49,6 +49,8 @@ namespace Microsoft.Maui.Platform
 
 				platformView.StrokeWidth = width;
 
+				platformView.ClipToOutline = true;
+
 				platformView.ShapeAppearanceModel =
 					platformView.ShapeAppearanceModel
 						.ToBuilder()

@@ -128,37 +128,49 @@ static class MauiRippleDrawableExtensions
 			maskDrawable.SetTint(AColor.White);
 			maskDrawable.SetCornerRadius(radius);
 
-			// Create the stroke layer.
-			strokeDrawable = new GradientDrawable();
-			strokeDrawable.SetCornerRadius(radius);
-			var strokeColor = stroke.StrokeColor ?? Colors.Black;
-			var strokeColorList = ColorStateListExtensions.CreateButton(strokeColor.ToPlatform());
-			strokeDrawable.SetStroke(width, strokeColorList);
-
 			// Create the entire drawable structure
 			var rippleColor = getDefaultRippleColor?.Invoke() ?? ColorStateList.ValueOf(Colors.White.WithAlpha(DefaultRippleAlpha).ToPlatform());
-			Drawable[] layers;
+			strokeDrawable = UpdateStrokeDrawableAlpha(platformView, strokeDrawable!, stroke, radius);
+			Drawable[] layers = strokeDrawable != null ? [backgroundDrawable, strokeDrawable] : [backgroundDrawable];
 			rippleDrawable =
 				new RippleDrawable(
 					rippleColor,
 					new InsetDrawable(
-						layerDrawable = new LayerDrawable(
-							layers = [backgroundDrawable, strokeDrawable]),
+						layerDrawable = new LayerDrawable(layers),
 						0, 0, 0, 0),
 					maskDrawable);
 
 			// Assign IDs so we can find them later
 			var idx = Array.IndexOf(layers, backgroundDrawable);
 			layerDrawable.SetId(idx, MauiBackgroundDrawableId);
-			idx = Array.IndexOf(layers, strokeDrawable);
-			layerDrawable.SetId(idx, MauiStrokeDrawableId);
 
-			beforeSet?.Invoke();
+			if (strokeDrawable is not null)
+			{
+				idx = Array.IndexOf(layers, strokeDrawable);
+				layerDrawable.SetId(idx, MauiStrokeDrawableId);
+				beforeSet?.Invoke();
+			}
 
 			// Finally, we replace the background and Android will tell us that we are now
 			// responsible for everything - which we want.
 			platformView.Background = rippleDrawable;
 		}
+	}
+
+	static GradientDrawable? UpdateStrokeDrawableAlpha(AView platformView, GradientDrawable strokeDrawable, IButtonStroke stroke, int radius)
+	{
+		if (platformView is MauiShapeableImageView)
+		{
+			return null;
+		}
+
+		strokeDrawable = strokeDrawable ?? new GradientDrawable();
+		strokeDrawable.SetCornerRadius(radius);
+		var strokeColor = stroke.StrokeColor ?? Colors.Black;
+		var strokeColorList = ColorStateListExtensions.CreateButton(strokeColor.ToPlatform());
+		strokeDrawable.SetStroke((int)stroke.StrokeThickness, strokeColorList);
+
+		return strokeDrawable;
 	}
 
 	internal static (int Thickness, ColorStateList Color, int Radius) GetStrokeProperties(this IButtonStroke button, Context context, bool defaultButtonLogic)
