@@ -290,6 +290,21 @@ namespace Microsoft.Maui.Controls
 			{
 				VisualStateManager.GoToState(_templateRoot, stateGroup);
 			}
+			
+			// Ensure template elements reflect ForegroundColor changes from visual states
+			// After applying visual states, propagate the updated ForegroundColor to template labels
+			if (_templateRoot is not null)
+			{
+				if (GetTemplateChild(TitleBarTitle) is Label titleLabel)
+				{
+					titleLabel.TextColor = ForegroundColor;
+				}
+				
+				if (GetTemplateChild(TitleBarSubtitle) is Label subtitleLabel)
+				{
+					subtitleLabel.TextColor = ForegroundColor;
+				}
+			}
 		}
 
 		/// <summary>
