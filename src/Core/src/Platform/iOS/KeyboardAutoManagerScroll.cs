@@ -715,7 +715,14 @@ public static class KeyboardAutoManagerScroll
 
 		if (move >= 0)
 		{
-			rootViewOrigin.Y = (nfloat)Math.Max(rootViewOrigin.Y - move, Math.Min(0, -kbSize.Height - TextViewDistanceFromBottom));
+			// Check if the view is positioned near the bottom of the screen (likely VerticalOptions="End")
+			// If so, allow more movement to ensure content stays visible above the keyboard
+			var isNearBottom = viewRectInWindow.Bottom > window.Frame.Height * 0.6; // Bottom 40% of screen
+			var maxUpwardMovement = isNearBottom ? 
+				Math.Min(0, -move) : // Allow full movement for bottom-positioned content
+				Math.Min(0, -kbSize.Height - TextViewDistanceFromBottom); // Use original constraint for other content
+			
+			rootViewOrigin.Y = (nfloat)Math.Max(rootViewOrigin.Y - move, maxUpwardMovement);
 
 			if (ContainerView.Frame.X != rootViewOrigin.X || ContainerView.Frame.Y != rootViewOrigin.Y)
 			{
