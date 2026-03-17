@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Maui.Graphics;
+using Microsoft.Maui.Primitives;
 
 namespace Microsoft.Maui.Layouts
 {
@@ -15,6 +16,13 @@ namespace Microsoft.Maui.Layouts
 
 			double measuredWidth = 0;
 			double measuredHeight = 0;
+			
+			// If the stack is centered vertically, allow children to size to content
+			// by passing infinite height constraint
+			double childHeightConstraint = Stack.VerticalLayoutAlignment == LayoutAlignment.Center
+				? double.PositiveInfinity
+				: heightConstraint - padding.VerticalThickness;
+			
 			int spacingCount = 0;
 
 			for (int n = 0; n < Stack.Count; n++)
@@ -27,7 +35,7 @@ namespace Microsoft.Maui.Layouts
 				}
 
 				spacingCount += 1;
-				var measure = child.Measure(double.PositiveInfinity, heightConstraint - padding.VerticalThickness);
+				var measure = child.Measure(double.PositiveInfinity, childHeightConstraint);
 				measuredWidth += measure.Width;
 				measuredHeight = Math.Max(measuredHeight, measure.Height);
 			}
