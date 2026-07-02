@@ -167,7 +167,6 @@ namespace Microsoft.Maui.Platform
 
 #if WINDOWS || IOS || ANDROID || TIZEN
 		internal static IWindow GetWindow(this IElement element) =>
-		    (element as IViewWithWindow)?.Window ??
 #if !TIZEN
 			(element as IView)?.GetHostedWindow() ??
 #endif
